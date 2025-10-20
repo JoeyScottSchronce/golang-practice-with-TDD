@@ -6,7 +6,7 @@ import (
 )
 
 func TestCounter(t *testing.T) {
-	t.Run("incrementing an unsafe counter", func(t *testing.T) {
+	t.Run("incrementing an standard counter", func(t *testing.T) {
 		counter := NewCounter()
 		counter.Inc()
 		counter.Inc()
