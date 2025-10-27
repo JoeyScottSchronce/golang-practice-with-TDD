@@ -3,6 +3,8 @@ package blogposts_test
 import (
 	"testing"
 	"testing/fstest"
+
+	blogposts "github.com/JoeyScottSchronce/golang-practice-with-TDD/reading_files/blogposts"
 )
 
 func TestBlogPosts(t *testing.T) {
