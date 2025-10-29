@@ -37,9 +37,18 @@ func TestNewBlogPosts(t *testing.T) {
 
 	const (
 		firstBody = `Title: Post 1
-Description: This is from the first body`
+Description: This is from the first body
+Tags: tag1, tag2, tag3, tag4
+---
+The body of this post
+is brief for brevity`
+
 		secondBody = `Title: Post 2
-Description: This is from the second body`
+Description: This is from the second body
+Tags: tag1, tag2
+---
+Hello
+world!`
 	)
 
 	fs := fstest.MapFS{
@@ -56,5 +65,8 @@ Description: This is from the second body`
 	assertPost(t, posts[0], blogposts.Post{
 		Title:       " Post 1",
 		Description: " This is from the first body",
+		Tags:        []string{"tag1", "tag2", "tag3", "tag4"},
+		Body: `The body of this post
+is brief for brevity`,
 	})
 }

@@ -2,6 +2,8 @@ package blogposts
 
 import (
 	"bufio"
+	"bytes"
+	"fmt"
 	"io"
 	"strings"
 )
@@ -9,23 +11,50 @@ import (
 type Post struct {
 	Title       string
 	Description string
+	Tags        []string
+	Body        string
 }
 
 const (
 	titleSeparator       = "Title:"
 	descriptionSeparator = "Description:"
+	tagsSeparator        = "Tags:"
 )
 
 func newPost(postFile io.Reader) (Post, error) {
+
 	scanner := bufio.NewScanner(postFile)
 
-	readLine := func() string {
+	readMetaLine := func(tagName string) string {
 		scanner.Scan()
-		return scanner.Text()
+		return strings.TrimPrefix(scanner.Text(), tagName)
 	}
 
-	title := strings.TrimPrefix(readLine(), titleSeparator)
-	description := strings.TrimPrefix(readLine(), descriptionSeparator)
+	readTagLine := func(scanner *bufio.Scanner, tagName string) []string {
+		scanner.Scan()
+		rawTags := strings.Split(strings.TrimPrefix(scanner.Text(), tagName), ",")
+		tags := make([]string, 0, len(rawTags))
+		for _, tag := range rawTags {
+			tags = append(tags, strings.TrimSpace(tag))
+		}
+		return tags
+	}
 
-	return Post{Title: title, Description: description}, nil
+	readBodyLine := func(scanner *bufio.Scanner) string {
+		scanner.Scan() // ignore the "---" line
+
+		buf := bytes.Buffer{}
+
+		for scanner.Scan() {
+			fmt.Fprintln(&buf, scanner.Text())
+		}
+		return strings.TrimSuffix(buf.String(), "\n")
+	}
+
+	return Post{
+		Title:       readMetaLine(titleSeparator),
+		Description: readMetaLine(descriptionSeparator),
+		Tags:        readTagLine(scanner, tagsSeparator),
+		Body:        readBodyLine(scanner),
+	}, nil
 }
