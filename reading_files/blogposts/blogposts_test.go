@@ -34,9 +34,17 @@ func TestBlogPosts(t *testing.T) {
 }
 
 func TestNewBlogPosts(t *testing.T) {
+
+	const (
+		firstBody = `Title: Post 1
+Description: This is from the first body`
+		secondBody = `Title: Post 2
+Description: This is from the second body`
+	)
+
 	fs := fstest.MapFS{
-		"hello world.md":  {Data: []byte("Title: Post 1")},
-		"hello-world2.md": {Data: []byte("Title: Post 2")},
+		"hello world.md":  {Data: []byte(firstBody)},
+		"hello-world2.md": {Data: []byte(secondBody)},
 	}
 
 	posts, err := blogposts.NewPostsFromFS(fs)
@@ -45,6 +53,8 @@ func TestNewBlogPosts(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	assertPost(t, posts[0], blogposts.Post{Title: " Post 1"})
-	assertPost(t, posts[1], blogposts.Post{Title: " Post 2"})
+	assertPost(t, posts[0], blogposts.Post{
+		Title:       " Post 1",
+		Description: " This is from the first body",
+	})
 }
