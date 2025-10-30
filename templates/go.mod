@@ -1,3 +1,3 @@
-module github.com/JoeyScottSchronce/golang-practice-with-TDD/templates
+module example.com/templates
 
 go 1.25.1
