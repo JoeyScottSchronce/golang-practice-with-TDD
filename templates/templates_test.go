@@ -4,7 +4,8 @@ import (
 	"bytes"
 	"testing"
 
-	"example.com/templates"
+	"github.com/JoeyScottSchronce/golang-practice-with-TDD/templates"
+	approvals "github.com/approvals/go-approval-tests"
 )
 
 func TestRender(t *testing.T) {
@@ -19,17 +20,11 @@ func TestRender(t *testing.T) {
 
 	t.Run("converts a single post into HTML", func(t *testing.T) {
 		buf := bytes.Buffer{}
-		err := templates.Render(&buf, aPost)
 
-		if err != nil {
+		if err := templates.Render(&buf, aPost); err != nil {
 			t.Fatal(err)
 		}
 
-		got := buf.String()
-		want := `<h1>Good Morning Everyone</h1>`
-
-		if got != want {
-			t.Errorf("got '%s' want '%s'", got, want)
-		}
+		approvals.VerifyString(t, buf.String())
 	})
 }

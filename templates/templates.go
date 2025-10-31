@@ -1,7 +1,8 @@
 package templates
 
 import (
-	"fmt"
+	"embed"
+	"html/template"
 	"io"
 )
 
@@ -10,7 +11,20 @@ type Post struct {
 	Tags                     []string
 }
 
+var (
+	//go:embed blog_templates/*.gohtml
+	postTemplates embed.FS
+)
+
 func Render(w io.Writer, p Post) error {
-	_, err := fmt.Fprintf(w, "<h1>%s</h1>", p.Title)
-	return err
+	templ, err := template.ParseFS(postTemplates, "blog_templates/*.gohtml")
+
+	if err != nil {
+		return err
+	}
+
+	if err := templ.Execute(w, p); err != nil {
+		return err
+	}
+	return nil
 }
