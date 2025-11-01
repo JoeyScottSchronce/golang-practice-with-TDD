@@ -36,3 +36,9 @@ func (r *PostRendering) Render(w io.Writer, p Post) error {
 	}
 	return nil
 }
+
+// TODO: Retrieve text body from post.md in posts dir.
+
+// TODO: Convert markdown body into gohtml.
+
+// TODO: Render converted body in blog.gohtml template.
