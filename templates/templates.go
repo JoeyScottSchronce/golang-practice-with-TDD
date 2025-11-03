@@ -4,6 +4,9 @@ import (
 	"embed"
 	"html/template"
 	"io"
+	"log"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/gomarkdown/markdown"
@@ -57,9 +60,22 @@ func (r *PostRendering) RenderIndex(w io.Writer, posts []Post) error {
 
 func newPostVM(p Post, r *PostRendering) postViewModel {
 	vm := postViewModel{Post: p}
-	vm.HTMLBody = template.HTML(markdown.ToHTML([]byte(p.Body), r.mdParser, nil))
+	vm.HTMLBody = template.HTML(markdown.ToHTML([]byte(postUpdate()), r.mdParser, nil))
 
 	return vm
 }
 
-// TODO: continue attempt to render the new Body from posts/post.md.
+func postUpdate() string {
+	filePath := filepath.Join("posts", "post.md")
+	file, err := os.Open(filePath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	data, err := io.ReadAll(file)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return string(data)
+}

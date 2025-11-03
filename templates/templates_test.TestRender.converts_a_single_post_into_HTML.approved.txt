@@ -25,7 +25,7 @@
 
 Tags: <ul><li>go</li><li>tdd</li><li>yay</li></ul>
 
-<p>This is the original post on my new blog</p>
+<p>This is the new Body of the post, coming from the post.md file.</p>
 
 
 

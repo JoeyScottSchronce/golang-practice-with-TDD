@@ -58,12 +58,14 @@ func BenchmarkRender(b *testing.B) {
 	)
 
 	postRendering, err := templates.NewPostRender()
-
 	if err != nil {
 		b.Fatal(err)
 	}
 
 	for b.Loop() {
-		postRendering.Render(io.Discard, aPost)
+		err := postRendering.Render(io.Discard, aPost)
+		if err != nil {
+			b.Fatal(err)
+		}
 	}
 }
