@@ -4,6 +4,10 @@ import (
 	"embed"
 	"html/template"
 	"io"
+	"strings"
+
+	"github.com/gomarkdown/markdown"
+	"github.com/gomarkdown/markdown/parser"
 )
 
 type Post struct {
@@ -12,7 +16,13 @@ type Post struct {
 }
 
 type PostRendering struct {
-	templ *template.Template
+	templ    *template.Template
+	mdParser *parser.Parser
+}
+
+type postViewModel struct {
+	Post
+	HTMLBody template.HTML
 }
 
 var (
@@ -27,18 +37,29 @@ func NewPostRender() (*PostRendering, error) {
 		return nil, err
 	}
 
-	return &PostRendering{templ: templ}, nil
+	extensions := parser.CommonExtensions | parser.AutoHeadingIDs
+	parser := parser.NewWithExtensions(extensions)
+
+	return &PostRendering{templ: templ, mdParser: parser}, nil
 }
 
 func (r *PostRendering) Render(w io.Writer, p Post) error {
-	if err := r.templ.ExecuteTemplate(w, "blog.gohtml", p); err != nil {
-		return err
-	}
-	return nil
+	return r.templ.ExecuteTemplate(w, "blog.gohtml", newPostVM(p, r))
 }
 
-// TODO: Retrieve text body from post.md in posts dir.
+func (p Post) SanitisedTitle() string {
+	return strings.ToLower(strings.Replace(p.Title, " ", "-", -1))
+}
 
-// TODO: Convert markdown body into gohtml.
+func (r *PostRendering) RenderIndex(w io.Writer, posts []Post) error {
+	return r.templ.ExecuteTemplate(w, "index.gohtml", posts)
+}
 
-// TODO: Render converted body in blog.gohtml template.
+func newPostVM(p Post, r *PostRendering) postViewModel {
+	vm := postViewModel{Post: p}
+	vm.HTMLBody = template.HTML(markdown.ToHTML([]byte(p.Body), r.mdParser, nil))
+
+	return vm
+}
+
+// TODO: continue attempt to render the new Body from posts/post.md.

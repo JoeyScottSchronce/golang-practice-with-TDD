@@ -19,14 +19,18 @@
 </nav>
 <main>
 
-<h1>Good Morning Everyone</h1>
 
-<p>This is a description of my first post</p>
+<ol>
 
-Tags: <ul><li>go</li><li>tdd</li><li>yay</li></ul>
+    <li>
+    <a href="/post/hello-world">Hello World</a>
+    </li>
 
-<p>This is the original post on my new blog</p>
+    <li>
+    <a href="/post/hello-world-2">Hello World 2</a>
+    </li>
 
+</ol>
 
 
 </main>
