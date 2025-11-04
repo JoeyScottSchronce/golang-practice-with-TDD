@@ -16,4 +16,54 @@ func TestAssertFunctions(t *testing.T) {
 	})
 }
 
-// next test here
+func AssertTrue(t *testing.T, got bool) {
+	t.Helper()
+	if !got {
+		t.Errorf("got %v, want true", got)
+	}
+}
+
+func AssertFalse(t *testing.T, got bool) {
+	t.Helper()
+	if got {
+		t.Errorf("got %v, want false", got)
+	}
+}
+
+func TestStack(t *testing.T) {
+	t.Run("stack of intergers", func(t *testing.T) {
+
+		StackOfInts := new(IntStack)
+		AssertTrue(t, StackOfInts.IsEmpty())
+
+		StackOfInts.Push(32)
+		AssertFalse(t, StackOfInts.IsEmpty())
+
+		StackOfInts.Push(64)
+		val, _ := StackOfInts.Pop()
+		AssertEqual(t, val, 64)
+
+		val2, _ := StackOfInts.Pop()
+		AssertEqual(t, val2, 32)
+
+		AssertTrue(t, StackOfInts.IsEmpty())
+	})
+
+	t.Run("Stack of strings", func(t *testing.T) {
+
+		StackOfStrs := new(StrStack)
+		AssertTrue(t, StackOfStrs.IsEmpty())
+
+		StackOfStrs.Push("8")
+		AssertFalse(t, StackOfStrs.IsEmpty())
+
+		StackOfStrs.Push("16")
+		val, _ := StackOfStrs.Pop()
+		AssertEqual(t, val, "16")
+
+		val2, _ := StackOfStrs.Pop()
+		AssertEqual(t, val2, "8")
+
+		AssertTrue(t, StackOfStrs.IsEmpty())
+	})
+}
