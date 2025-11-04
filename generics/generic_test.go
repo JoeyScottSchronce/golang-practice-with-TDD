@@ -15,3 +15,5 @@ func TestAssertFunctions(t *testing.T) {
 		AssertNotEqual(t, "hello", "not hello")
 	})
 }
+
+// next test here
