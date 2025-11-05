@@ -33,7 +33,7 @@ func AssertFalse(t *testing.T, got bool) {
 func TestStack(t *testing.T) {
 	t.Run("stack of intergers", func(t *testing.T) {
 
-		StackOfInts := new(IntStack)
+		StackOfInts := NewStack[int]()
 		AssertTrue(t, StackOfInts.IsEmpty())
 
 		StackOfInts.Push(32)
@@ -47,11 +47,19 @@ func TestStack(t *testing.T) {
 		AssertEqual(t, val2, 32)
 
 		AssertTrue(t, StackOfInts.IsEmpty())
+
+		StackOfInts.Push(128)
+		StackOfInts.Push(255)
+
+		first, _ := StackOfInts.Pop()
+		second, _ := StackOfInts.Pop()
+
+		AssertEqual(t, first+second, 383)
 	})
 
 	t.Run("Stack of strings", func(t *testing.T) {
 
-		StackOfStrs := new(StrStack)
+		StackOfStrs := NewStack[string]()
 		AssertTrue(t, StackOfStrs.IsEmpty())
 
 		StackOfStrs.Push("8")
@@ -65,5 +73,13 @@ func TestStack(t *testing.T) {
 		AssertEqual(t, val2, "8")
 
 		AssertTrue(t, StackOfStrs.IsEmpty())
+
+		StackOfStrs.Push("World!")
+		StackOfStrs.Push("Hello ")
+
+		first, _ := StackOfStrs.Pop()
+		second, _ := StackOfStrs.Pop()
+
+		AssertEqual(t, first+second, "Hello World!")
 	})
 }

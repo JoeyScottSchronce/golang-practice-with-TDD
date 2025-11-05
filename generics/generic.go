@@ -18,48 +18,30 @@ func AssertNotEqual[T comparable](t *testing.T, got, want T) {
 	}
 }
 
-type StrStack struct {
-	values []string
+func NewStack[T any]() *Stack[T] {
+	return new(Stack[T])
 }
 
-type IntStack struct {
-	values []int
+type Stack[T any] struct {
+	values []T
 }
 
-func (s *StrStack) IsEmpty() bool {
+func (s *Stack[T]) IsEmpty() bool {
 	return len(s.values) == 0
 }
 
-func (i *IntStack) IsEmpty() bool {
-	return len(i.values) == 0
-}
-
-func (s *StrStack) Push(val string) {
+func (s *Stack[T]) Push(val T) {
 	s.values = append(s.values, val)
 }
 
-func (i *IntStack) Push(val int) {
-	i.values = append(i.values, val)
-}
-
-func (s *StrStack) Pop() (string, bool) {
+func (s *Stack[T]) Pop() (T, bool) {
 	if s.IsEmpty() {
-		return "", false
+		var zero T
+		return zero, false
 	}
 
 	i := len(s.values) - 1
 	v := s.values[i]
 	s.values = s.values[:i]
-	return v, true
-}
-
-func (i *IntStack) Pop() (int, bool) {
-	if i.IsEmpty() {
-		return 0, false
-	}
-
-	j := len(i.values) - 1
-	v := i.values[j]
-	i.values = i.values[:j]
 	return v, true
 }
