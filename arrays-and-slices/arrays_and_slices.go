@@ -25,7 +25,7 @@ func SumAllTails(arr ...[]int) []int {
 	return Reduce(arr, sumTail, []int{})
 }
 
-func Reduce[T any](collection []T, f func(T, T) T, initialValue T) T {
+func Reduce[A, B any](collection []A, f func(B, A) B, initialValue B) B {
 	var result = initialValue
 
 	for _, v := range collection {
@@ -41,15 +41,15 @@ type Transaction struct {
 }
 
 func BalanceFor(transactions []Transaction, name string) float64 {
-	var balance float64
 
-	for _, t := range transactions {
+	adjustBalance := func(balance float64, t Transaction) float64 {
 		if t.From == name {
-			balance -= t.Sum
+			return balance - t.Sum
 		}
 		if t.To == name {
-			balance += t.Sum
+			return balance + t.Sum
 		}
+		return balance
 	}
-	return balance
+	return Reduce(transactions, adjustBalance, 0.0)
 }
