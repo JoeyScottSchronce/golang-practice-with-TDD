@@ -34,6 +34,15 @@ func Reduce[A, B any](collection []A, f func(B, A) B, initialValue B) B {
 	return result
 }
 
+func Find[T any](items []T, predicate func(T) bool) (val T, found bool) {
+	for _, v := range items {
+		if predicate(v) {
+			return v, true
+		}
+	}
+	return
+}
+
 type Transaction struct {
 	From string
 	To   string
